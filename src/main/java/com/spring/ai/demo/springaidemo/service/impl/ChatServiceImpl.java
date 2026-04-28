@@ -4,6 +4,7 @@ import com.spring.ai.demo.springaidemo.service.ChatService;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +14,9 @@ public class ChatServiceImpl implements ChatService {
     private ChatClient openAIChatClient;
     private ChatClient ollamaChatClient;
 
-    public ChatServiceImpl(OpenAiChatModel openAiChatModel, OllamaChatModel ollamaChatModel) {
-        this.openAIChatClient = ChatClient.builder(openAiChatModel).build();
-        this.ollamaChatClient = ChatClient.builder(ollamaChatModel).build();
+    public ChatServiceImpl(@Qualifier("openAiChatClient") ChatClient openAIChatClient, @Qualifier("ollamaChatClient") ChatClient ollamaChatClient) {
+        this.openAIChatClient = openAIChatClient;
+        this.ollamaChatClient = ollamaChatClient;
     }
 
     @Override
