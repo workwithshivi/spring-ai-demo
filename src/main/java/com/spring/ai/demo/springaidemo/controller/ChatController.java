@@ -34,4 +34,21 @@ public class ChatController {
         return ResponseEntity.ok(chatService.chatArray(q));
 
     }
+
+    @GetMapping("/promptTempelate")
+    public ResponseEntity<String> promptTempelate(@RequestParam(value = "q", required = true) String q) {
+
+        return ResponseEntity.ok(chatService.promptTempelate(q));
+
+    }
+
+    @GetMapping("/resource-prompt")
+    public ResponseEntity<String> resourcePrompts(@RequestParam(value = "topic", required = true) String topic,
+                                                  @RequestParam(value = "subTopic", required = true) String subTopic) {
+
+        return ResponseEntity.ok(chatService.resourcePrompts(topic,subTopic));
+
+    }
+
+
 }
