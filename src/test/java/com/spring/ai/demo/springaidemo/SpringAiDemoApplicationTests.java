@@ -20,7 +20,6 @@ class SpringAiDemoApplicationTests {
         System.out.println("********Testing*****");
 
         var output = chatService.resourcePrompts("push-pull-leg", "bro-split");
-
         System.out.println(output);
     }
 }
