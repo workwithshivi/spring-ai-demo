@@ -22,10 +22,10 @@ public class ChatController {
 
 
     @GetMapping("/chat")
-    public ResponseEntity<String> chat(@RequestParam(value = "q", required = true) String q) {
+    public String chat(@RequestParam(value = "q", required = true) String q) {
 
-        return chatService.chat(q);
-
+//        return chatService.chat(q);
+            return chatService.chatWithAdvisors(q);
     }
 
     @GetMapping("/chatArray")

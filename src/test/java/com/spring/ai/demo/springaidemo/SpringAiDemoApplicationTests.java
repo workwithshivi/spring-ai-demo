@@ -19,7 +19,7 @@ class SpringAiDemoApplicationTests {
     void testChatService(){
         System.out.println("********Testing*****");
 
-        var output = chatService.resourcePrompts("push-pull-leg", "bro-split");
+        var output = chatService.chatWithAdvisors("push-pull-leg");
 
         System.out.println(output);
     }

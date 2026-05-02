@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface ChatService {
-     ResponseEntity<String> chat(String q);
+     String chat(String q);
 
     List<User> chatArray(String query);
 
@@ -14,4 +14,6 @@ public interface ChatService {
     String promptTempelate(String q);
 
     String resourcePrompts(String topic, String subTopic);
+
+    String chatWithAdvisors(String query);
 }

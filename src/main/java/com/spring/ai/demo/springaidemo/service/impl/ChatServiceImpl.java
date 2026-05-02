@@ -3,6 +3,7 @@ package com.spring.ai.demo.springaidemo.service.impl;
 import com.spring.ai.demo.springaidemo.entity.User;
 import com.spring.ai.demo.springaidemo.service.ChatService;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -34,12 +35,9 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ResponseEntity<String> chat(String q) {
-
-
+    public String chat(String q) {
         var response = ollamaChatClient.prompt(q).call().content();
-
-        return ResponseEntity.ok(response);
+        return response;
     }
 
     @Override
@@ -107,5 +105,15 @@ public class ChatServiceImpl implements ChatService {
         return response;
     }
 
-
+    // advisors are something that we run/execute before or after any specific tasks
+    @Override
+    public String chatWithAdvisors(String query) {
+        var response = ollamaChatClient.prompt()
+                //.advisors(new SimpleLoggerAdvisor()) // advisors
+                .system(system -> system.text(systemResource))
+                .user(query)
+                .call()
+                .content();
+        return response;
+    }
 }
