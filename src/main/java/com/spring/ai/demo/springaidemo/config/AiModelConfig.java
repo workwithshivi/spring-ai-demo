@@ -1,5 +1,6 @@
 package com.spring.ai.demo.springaidemo.config;
 
+import com.spring.ai.demo.springaidemo.advisors.TokenPrintAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -22,7 +23,7 @@ public class AiModelConfig {
     @Bean(name = "ollamaChatClient")
     public ChatClient ollamaChatModel(OllamaChatModel chatModel) {
         return ChatClient.builder(chatModel)
-                .defaultAdvisors(new SimpleLoggerAdvisor(),new SafeGuardAdvisor(List.of("drugs","booster"))) // setting advisors
+                .defaultAdvisors(new TokenPrintAdvisor(),new SimpleLoggerAdvisor(),new SafeGuardAdvisor(List.of("drugs","booster"))) // setting advisors
                 .defaultOptions(OllamaChatOptions.builder() // we can set default properties here as well instead of setting in .properties file
                         .maxTokens(100)
                         .build())
