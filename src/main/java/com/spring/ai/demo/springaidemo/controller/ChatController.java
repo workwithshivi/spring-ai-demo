@@ -51,6 +51,9 @@ public class ChatController {
         return ResponseEntity.ok(chatService.streamChat(q));
     }
 
+    /*
+    * you have to pass userId in header to chreate new session for new user.
+    * */
     @GetMapping("/users-chat")
     public ResponseEntity<Flux<String>> streamChat(@RequestParam(value = "query", required = true) String query
             ,@RequestHeader(value = "userId") String userId) {
