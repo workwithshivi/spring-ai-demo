@@ -3,6 +3,7 @@ package com.spring.ai.demo.springaidemo.service.impl;
 import com.spring.ai.demo.springaidemo.entity.User;
 import com.spring.ai.demo.springaidemo.service.ChatService;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -94,7 +95,9 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public String resourcePrompts(String topic, String subTopic) {
 
-        var response = ollamaChatClient.prompt().system(system -> system.text(systemResource)).user(user -> user.text(userResource).param("topic", topic).param("subTopic", subTopic)).call().content();
+        var response = ollamaChatClient.prompt()
+                .system(system -> system.text(systemResource))
+                .user(user -> user.text(userResource).param("topic", topic).param("subTopic", subTopic)).call().content();
         return response;
     }
 
@@ -114,4 +117,16 @@ public class ChatServiceImpl implements ChatService {
                 .user(user-> user.text(userResource).param("topic",q))
                 .stream().content();
     }
+
+    @Override
+    public Flux<String> usersChat(String query, String userId) {
+        return ollamaChatClient.prompt()
+                // passing user id as conversation id to maintain session for different user
+                .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, userId))
+                .system(system -> system.text(systemResource))
+                .user(user-> user.text(userResource).param("topic",query))
+                .stream().content();
+    }
+
+
 }

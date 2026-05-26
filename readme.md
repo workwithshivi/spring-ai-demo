@@ -19,3 +19,6 @@
 - We have inMorory implemation for this class but can create custom implemation to save sata in db.
 
 - We can add multiple advisors
+- InMemoryChatMemoryRepository implements ChatMemoryRepository (Stores data in Map<String, List<Message>> chatMemoryStore = new ConcurrentHashMap<>();)
+- String as key is very important to keep data separate for different user (conversation ID) and important for session management
+- 

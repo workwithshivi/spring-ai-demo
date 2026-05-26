@@ -19,4 +19,6 @@ public interface ChatService {
     String chatWithAdvisors(String query);
 
     Flux<String> streamChat(String q);
+
+    Flux<String> usersChat(String query, String userId);
 }

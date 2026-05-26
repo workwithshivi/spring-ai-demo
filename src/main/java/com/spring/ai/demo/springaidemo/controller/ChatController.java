@@ -5,10 +5,7 @@ import com.spring.ai.demo.springaidemo.entity.User;
 import com.spring.ai.demo.springaidemo.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -38,7 +35,6 @@ public class ChatController {
 
     @GetMapping("/promptTempelate")
     public ResponseEntity<String> promptTempelate(@RequestParam(value = "q", required = true) String q) {
-
         return ResponseEntity.ok(chatService.promptTempelate(q));
 
     }
@@ -52,10 +48,13 @@ public class ChatController {
     }
     @GetMapping("/stream-chat")
     public ResponseEntity<Flux<String>> streamChat(@RequestParam(value = "q", required = true) String q) {
-
         return ResponseEntity.ok(chatService.streamChat(q));
-
     }
 
+    @GetMapping("/users-chat")
+    public ResponseEntity<Flux<String>> streamChat(@RequestParam(value = "query", required = true) String query
+            ,@RequestHeader(value = "userId") String userId) {
+        return ResponseEntity.ok(chatService.usersChat(query,userId));
+    }
 
 }

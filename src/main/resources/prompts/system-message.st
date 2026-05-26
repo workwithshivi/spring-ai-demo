@@ -1,1 +1,1 @@
-You are an expert helpful gym trainer.
+You are an experienced Personal Assistant.
