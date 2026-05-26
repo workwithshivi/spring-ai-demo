@@ -3,7 +3,6 @@ package com.spring.ai.demo.springaidemo.service.impl;
 import com.spring.ai.demo.springaidemo.entity.User;
 import com.spring.ai.demo.springaidemo.service.ChatService;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
@@ -11,8 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 import java.util.Map;
@@ -20,8 +19,8 @@ import java.util.Map;
 @Service
 public class ChatServiceImpl implements ChatService {
 
-    private ChatClient openAIChatClient;
-    private ChatClient ollamaChatClient;
+    private final ChatClient openAIChatClient;
+    private final ChatClient ollamaChatClient;
 
     @Value("classpath:/prompts/user-message.st")
     private Resource userResource;
@@ -82,9 +81,7 @@ public class ChatServiceImpl implements ChatService {
 
         // You can define system prompts as well.
 
-        var systemPromptTemplate =SystemPromptTemplate.builder()
-                .template("You are an expert Spring AI assistant.")
-                .build();
+        var systemPromptTemplate = SystemPromptTemplate.builder().template("You are an expert Spring AI assistant.").build();
         var systemMessage = systemPromptTemplate.createMessage();
         var userMessage = template.createMessage(Map.of("techName", "Spring Ai", "exampleName", "Spring Ai"));
 
@@ -97,11 +94,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public String resourcePrompts(String topic, String subTopic) {
 
-        var response =ollamaChatClient.prompt()
-                .system(system -> system.text(systemResource))
-                .user(user-> user.text(userResource).param("topic", topic).param("subTopic",subTopic))
-                .call()
-                .content();
+        var response = ollamaChatClient.prompt().system(system -> system.text(systemResource)).user(user -> user.text(userResource).param("topic", topic).param("subTopic", subTopic)).call().content();
         return response;
     }
 
@@ -110,10 +103,15 @@ public class ChatServiceImpl implements ChatService {
     public String chatWithAdvisors(String query) {
         var response = ollamaChatClient.prompt()
                 //.advisors(new SimpleLoggerAdvisor()) // advisors
-                .system(system -> system.text(systemResource))
-                .user(query)
-                .call()
-                .content();
+                .system(system -> system.text(systemResource)).user(query).call().content();
         return response;
+    }
+
+    @Override
+    public Flux<String> streamChat(String q) {
+
+        return ollamaChatClient.prompt().system(system -> system.text(systemResource))
+                .user(user-> user.text(userResource).param("topic",q))
+                .stream().content();
     }
 }

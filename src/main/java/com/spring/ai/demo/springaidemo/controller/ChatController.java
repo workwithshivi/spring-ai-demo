@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 import java.util.List;
 
@@ -47,6 +48,12 @@ public class ChatController {
                                                   @RequestParam(value = "subTopic", required = true) String subTopic) {
 
         return ResponseEntity.ok(chatService.resourcePrompts(topic,subTopic));
+
+    }
+    @GetMapping("/stream-chat")
+    public ResponseEntity<Flux<String>> streamChat(@RequestParam(value = "q", required = true) String q) {
+
+        return ResponseEntity.ok(chatService.streamChat(q));
 
     }
 
